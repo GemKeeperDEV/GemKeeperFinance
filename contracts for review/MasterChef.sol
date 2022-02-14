@@ -84,7 +84,7 @@ contract MasterChef is Ownable, ReentrancyGuard{
     // The block number when BLING mining starts.
     uint256 public startBlock;
 
-uint256[] public times = [
+uint256[] public timeOfEachPhase = [
 1644796800,
 1647388800,
 1649980800,
@@ -123,7 +123,7 @@ uint256[] public times = [
 1735516800,
 1738108800];
 
-uint256[] public blings = [
+uint256[] public blingOfEachPhase = [
 11152637748000000000,
 9753561328000000000,
 9237901733200000000,
@@ -163,7 +163,7 @@ uint256[] public blings = [
 2322466857200000000
 ];
 
-uint256 public currentBlingIndex ;
+uint256 public currentBlingPhase ;
 
 
     event Deposit(address indexed user, uint256 indexed pid, uint256 amount);
@@ -375,12 +375,13 @@ uint256 public currentBlingIndex ;
         }
     }
 
-    function updateBlingPerSec() public {
-        require (currentBlingIndex < times.length);
-        require (block.timestamp > times[currentBlingIndex + 1]);
+    // updates Bling per block according to hard-coded phases to adjust emission rate
+    function updateBlingPerBlock() public {
+        require (currentBlingPhase < timeOfEachPhase.length, "no updates available!");
+        require (block.timestamp > timeOfEachPhase[currentBlingPhase + 1], "wait until the next phase");
         massUpdatePools();
-        currentBlingIndex ++;
-        blingPerBlock = blings[currentBlingIndex];
+        currentBlingPhase ++;
+        blingPerBlock = blingOfEachPhase[currentBlingPhase];
     }
 
     // launch the token
