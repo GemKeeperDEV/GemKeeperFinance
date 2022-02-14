@@ -293,7 +293,7 @@ uint256 public currentBlingPhase ;
             multiplier.mul(blingPerBlock).mul(pool.allocPoint).div(
                 totalAllocPoint
             );
-        bling.mint(devaddr, blingReward.mul(10).div(65));
+        bling.mint(devaddr, blingReward.mul(100).div(625));
         bling.mint(address(this), blingReward);
         pool.accBlingPerShare = pool.accBlingPerShare.add(
             blingReward.mul(1e12).div(lpSupply)
