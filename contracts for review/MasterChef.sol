@@ -33,9 +33,8 @@ interface Bling {
 
 }
 
-
 // MasterChef is the master of Bling. He can make Bling and he is a fair guy.
-contract MasterChef is Ownable {
+contract MasterChef is Ownable, ReentrancyGuard{
     using SafeMath for uint256;
     using SafeERC20 for IERC20;
     // Info of each user.
@@ -84,6 +83,89 @@ contract MasterChef is Ownable {
     uint256 public totalAllocPoint = 0;
     // The block number when BLING mining starts.
     uint256 public startBlock;
+
+uint256[] public times = [
+1644796800,
+1647388800,
+1649980800,
+1652572800,
+1655164800,
+1657756800,
+1660348800,
+1662940800,
+1665532800,
+1668124800,
+1670716800,
+1673308800,
+1675900800,
+1678492800,
+1681084800,
+1683676800,
+1686268800,
+1688860800,
+1691452800,
+1694044800,
+1696636800,
+1699228800,
+1701820800,
+1704412800,
+1707004800,
+1709596800,
+1712188800,
+1714780800,
+1717372800,
+1719964800,
+1722556800,
+1725148800,
+1727740800,
+1730332800,
+1732924800,
+1735516800,
+1738108800];
+
+uint256[] public blings = [
+11152637748000000000,
+9753561328000000000,
+9237901733200000000,
+8038693373200000000,
+7279194745200000000,
+6799511401200000000,
+6439748893200000000,
+6199907221200000000,
+5960065549200000000,
+5720223877200000000,
+5480382205200000000,
+5240540533200000000,
+5000698861200000000,
+4800830801200000000,
+4560989129200000000,
+4361121069200000000,
+4161253009200000000,
+4001358561200000000,
+3801490501200000000,
+3641596053200000000,
+3481701605200000000,
+3361780769200000000,
+3241859933200000000,
+3121939097200000000,
+3002018261200000000,
+2922071037200000000,
+2842123813200000000,
+2762176589200000000,
+2682229365200000000,
+2642255753200000000,
+2562308529200000000,
+2522334917200000000,
+2482361305200000000,
+2442387693200000000,
+2402414081200000000,
+2362440469200000000,
+2322466857200000000
+];
+
+uint256 public currentBlingIndex ;
+
+
     event Deposit(address indexed user, uint256 indexed pid, uint256 amount);
     event Withdraw(address indexed user, uint256 indexed pid, uint256 amount);
     event EmergencyWithdraw(
@@ -105,7 +187,7 @@ contract MasterChef is Ownable {
         blingPerBlock = _blingPerBlock;
         bonusEndBlock = _bonusEndBlock;
         startBlock = _startBlock;
-        tokenLaunch = _tokenLaunch;
+        tokenLaunchTime = _tokenLaunch;
     }
 
     function poolLength() external view returns (uint256) {
@@ -291,6 +373,14 @@ contract MasterChef is Ownable {
         } else {
             bling.transfer(_to, _amount);
         }
+    }
+
+    function updateBlingPerSec() public {
+        require (currentBlingIndex < times.length);
+        require (block.timestamp > times[currentBlingIndex + 1]);
+        massUpdatePools();
+        currentBlingIndex ++;
+        blingPerBlock = blings[currentBlingIndex];
     }
 
     // launch the token
