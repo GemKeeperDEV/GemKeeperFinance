@@ -85,43 +85,44 @@ contract MasterChef is Ownable, ReentrancyGuard{
     uint256 public startBlock;
 
 uint256[] public timeOfEachPhase = [
-1644796800,
-1647388800,
-1649980800,
-1652572800,
-1655164800,
-1657756800,
-1660348800,
-1662940800,
-1665532800,
-1668124800,
-1670716800,
-1673308800,
-1675900800,
-1678492800,
-1681084800,
-1683676800,
-1686268800,
-1688860800,
-1691452800,
-1694044800,
-1696636800,
-1699228800,
-1701820800,
-1704412800,
-1707004800,
-1709596800,
-1712188800,
-1714780800,
-1717372800,
-1719964800,
-1722556800,
-1725148800,
-1727740800,
-1730332800,
-1732924800,
-1735516800,
-1738108800];
+450348,
+820634,
+1190919,
+1561205,
+1931491,
+2301777,
+2672062,
+3042348,
+3412634,
+3782919,
+4153205,
+4523491,
+4893777,
+5264062,
+5634348,
+6004634,
+6374919,
+6745205,
+7115491,
+7485777,
+7856062,
+8226348,
+8596634,
+8966919,
+9337205,
+9707491,
+10077777,
+10448062,
+10818348,
+11188634,
+11558919,
+11929205,
+12299491,
+12669777,
+13040062,
+13410348,
+13780634
+];
 
 uint256[] public blingOfEachPhase = [
 11152637748000000000,
@@ -378,9 +379,9 @@ uint256 public currentBlingPhase ;
     // updates Bling per block according to hard-coded phases to adjust emission rate
     function updateBlingPerBlock() public {
         require (currentBlingPhase < timeOfEachPhase.length, "no updates available!");
-        require (block.timestamp > timeOfEachPhase[currentBlingPhase + 1], "wait until the next phase");
+        require (block.number > timeOfEachPhase[currentBlingPhase + 1], "wait until the next phase");
         massUpdatePools();
-        currentBlingPhase ++;
+        currentBlingPhase++;
         blingPerBlock = blingOfEachPhase[currentBlingPhase];
     }
 
