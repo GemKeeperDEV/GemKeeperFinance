@@ -74,7 +74,7 @@ contract MasterChef is Ownable, ReentrancyGuard{
     // BLING tokens publicly launched.
     bool public tokenLaunched = false;
     // Bonus muliplier for early bling makers.
-    uint256 public constant BONUS_MULTIPLIER = 2;
+    uint256 public constant BONUS_MULTIPLIER = 1;
     // Info of each pool.
     PoolInfo[] public poolInfo;
     // Info of each user that stakes LP tokens.
